@@ -1,0 +1,169 @@
+﻿@model IEnumerable<JMTI_Test.Models.Artist>
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    Layout = null;
+    int number = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+    <link href="/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        table,tr,td,th
+        {
+            border:1px solid black;
+            border-collapse:collapse;
+            padding:10px;
+            vertical-align:text-top;
+        }
+
+        table img
+        {
+            width:180px;
+            height:150px;
+            float:left;
+            margin-right:15px;
+        }
+
+        a
+        {
+            text-decoration:none;
+            display:block;
+            width:85px;
+            color:white;
+            padding:15px 5px;
+            border-radius:5px;
+            text-align:center;
+            margin-bottom:5px;
+        }
+
+        a.blue {
+            background: blue;
+        }
+
+        a.red {
+            background: red;
+        }
+
+        #info
+        {
+            display:block;
+            padding:5px;
+            background:grey;
+            color:white;
+            border-radius:5px;
+            text-align:center;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function DeleteConfirm() {
+            if (confirm("Are you sure want to delete record"))
+                return true;
+            else
+                return false;
+        }
+
+
+    </script>
+
+</head>
+<body>
+
+    @if (TempData["MessageInfo"] != null)
+    {
+        <div id="info">
+            @TempData["MessageInfo"]
+        </div>
+    }
+
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "blue" })
+    </p>
+
+    <div>
+        @using (Html.BeginForm())
+        {
+            <p>
+                Find by name: @Html.TextBox("SearchString")
+                <input type="submit" value="Search" />
+            </p>
+        }
+    </div>
+    
+    @if (Model.Count()==0)
+    {
+        <p>No Data in this system.</p>
+    }
+    else
+    {   
+        <table>
+        <tr>
+            <th>
+                No.
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArtistName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SampleUrl)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @{number++;}
+                @number
+            </td>
+            <td>
+                <img src="@Path.Combine(Url.Content("~/Content/Upload/Image"),item.ImageUrl)">
+                @item.PackageName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArtistName)
+            </td>
+            <td>
+                @item.ReleaseDate.ToString("dd MMM yyyy")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <audio controls>
+                    <source src="@Path.Combine(Url.Content("~/Content/Upload/Sample"),item.SampleUrl)" type="audio/mp3">
+                    Your browser does not support the audio element.
+                </audio>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ArtistId }, new {@class="blue delete-link" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ArtistId }, new { onclick = " return DeleteConfirm()", @class = "red" })
+            </td>
+        </tr>
+    }
+    
+    </table>
+    }
+
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index",
+    new { page }))
+</body>
+</html>

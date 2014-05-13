@@ -1,0 +1,94 @@
+﻿@model JMTI_Test.DTO.ArtistDTO
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.24.min.js")" type="text/javascript"></script>
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/themes/base/jquery.ui.datepicker.css")" />
+<link rel="Stylesheet" type="text/css" href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" />
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#ReleaseDate").datepicker({
+            dateFormat: "yy-mm-dd"
+
+        });
+    });
+</script>
+
+
+
+    @using (Html.BeginForm("Edit", "Artist", FormMethod.Post, new { enctype = "multipart/form-data" })) {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+    
+        <fieldset>
+            <legend>ArtistDTO</legend>
+
+            @Html.HiddenFor(model=>model.ArtistId)
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ArtistName)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.ArtistName)
+                @Html.ValidationMessageFor(model => model.ArtistName)
+            </div>
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.PackageName)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.PackageName)
+                @Html.ValidationMessageFor(model => model.PackageName)
+            </div>
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ReleaseDate)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ReleaseDate, new { @Value = Model.ReleaseDate.ToString("yyyy-MM-dd") })
+                @Html.ValidationMessageFor(model => model.ReleaseDate)
+            </div>
+    
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Price)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.Price)
+                @Html.ValidationMessageFor(model => model.Price)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Image)
+            </div>
+            <div class="editor-field">
+                <input type="file" name="image" />
+                @Html.ValidationMessageFor(model => model.Image)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Sample)
+            </div>
+            <div class="editor-field">
+                <input type="file" name="sample" />
+                @Html.ValidationMessageFor(model => model.Sample)
+            </div>
+    
+            <p>
+                <input type="submit" value="Save" />
+            </p>
+        </fieldset>
+    }
+    
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
